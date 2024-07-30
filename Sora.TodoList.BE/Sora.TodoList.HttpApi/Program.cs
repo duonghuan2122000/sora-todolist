@@ -5,6 +5,8 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Serialization;
 using NLog;
 using NLog.Web;
+using Sora.TodoList.HttpApi.DI;
+using Sora.TodoList.HttpApi.Filters;
 using System;
 using System.IO;
 using System.Threading.Tasks;
@@ -25,6 +27,7 @@ namespace Sora.TodoList.HttpApi
 
             // Early init of NLog to allow startup and exception logging, before host is built
             var logger = NLog.LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
+            var todoListCors = "_myAllowSpecificOrigins";
 
             try
             {
@@ -34,7 +37,10 @@ namespace Sora.TodoList.HttpApi
 
                 // Add services to the container.
 
-                builder.Services.AddControllers()
+                builder.Services.AddControllers(options =>
+                {
+                    options.Filters.Add<TodoListActionFilter>();
+                })
                     .AddNewtonsoftJson(options =>
                     {
                         options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
@@ -45,9 +51,24 @@ namespace Sora.TodoList.HttpApi
                 builder.Logging.ClearProviders();
                 builder.Host.UseNLog();
 
+                builder.Services.RegisterConfig(builder.Configuration);
+                builder.Services.RegisterServices();
+
                 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
                 builder.Services.AddEndpointsApiExplorer();
                 builder.Services.AddSwaggerGen();
+
+                builder.Services.AddCors(options =>
+                {
+                    options.AddPolicy(name: todoListCors,
+                                      policy =>
+                                      {
+                                          policy.WithOrigins(builder.Configuration["Cors"].Split(","))
+                                            .AllowCredentials()
+                                            .AllowAnyHeader()
+                                            .AllowAnyMethod();
+                                      });
+                });
 
                 var app = builder.Build();
 
@@ -56,6 +77,8 @@ namespace Sora.TodoList.HttpApi
                 app.UseSwaggerUI();
 
                 app.UseHttpsRedirection();
+
+                app.UseCors(todoListCors);
 
                 app.UseAuthorization();
 

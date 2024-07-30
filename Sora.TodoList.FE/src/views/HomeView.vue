@@ -1,9 +1,8 @@
-<script setup>
-import TheWelcome from '../components/TheWelcome.vue'
-</script>
-
+<!-- 
+    Trang chủ
+-->
 <template>
-  <main>
-    <TheWelcome />
-  </main>
+    <div class="HomeView">
+        <div>Auth</div>
+    </div>
 </template>
