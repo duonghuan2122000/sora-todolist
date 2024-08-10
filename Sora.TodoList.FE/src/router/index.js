@@ -13,9 +13,33 @@ const router = createRouter({
             },
         },
         {
+            path: "/tasks",
+            name: "Tasks",
+            component: () => import("@/views/tasks/ListView.vue"),
+            meta: {
+                requiresAuth: true,
+            },
+        },
+        {
+            path: "/task",
+            name: "CreateTask",
+            component: () => import("@/views/tasks/CreateView.vue"),
+            meta: {
+                requiresAuth: true,
+            },
+        },
+        {
             path: "/login",
             name: "Login",
             component: () => import("@/views/auths/LoginView.vue"),
+            meta: {
+                usedLayout: false,
+            },
+        },
+        {
+            path: "/register",
+            name: "Register",
+            component: () => import("@/views/auths/RegisterView.vue"),
             meta: {
                 usedLayout: false,
             },

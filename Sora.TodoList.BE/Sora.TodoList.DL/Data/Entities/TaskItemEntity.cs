@@ -5,7 +5,7 @@ namespace Sora.TodoList.DL.Data.Entities
     /// <summary>
     /// Thông tin task
     /// </summary>
-    public class TaskItem
+    public class TaskItemEntity
     {
         /// <summary>
         /// Khóa chính

@@ -1,8 +1,10 @@
 // Base HttpClient
 import axios from "axios";
+import { useAuthStore } from "@/stores/auth";
 class HttpClientBase {
     async requestAsync(config) {
         const me = this;
+
         const result = {};
         try {
             // format header
@@ -30,6 +32,10 @@ class HttpClientBase {
 
     _processHeader(headers) {
         headers["Content-Type"] = "application/json";
+
+        const AuthStore = useAuthStore();
+
+        headers["Authorization"] = `Bearer ${AuthStore.auth.accessToken}`;
     }
 
     getDomain(name) {

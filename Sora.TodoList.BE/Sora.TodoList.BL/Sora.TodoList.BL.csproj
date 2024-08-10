@@ -15,8 +15,4 @@
     <ProjectReference Include="..\Sora.TodoList.DL\Sora.TodoList.DL.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="NewFolder\" />
-  </ItemGroup>
-
 </Project>

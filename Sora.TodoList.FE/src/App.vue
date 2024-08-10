@@ -31,6 +31,9 @@ onMounted(async () => {
 #body {
     height: 100vh;
     width: 100vw;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
 }
 </style>
 
@@ -42,5 +45,14 @@ html {
 }
 * {
     box-sizing: border-box;
+}
+
+#body {
+    .HeaderLayout {
+        flex: 0;
+    }
+    .BodyLayout {
+        flex: 1;
+    }
 }
 </style>

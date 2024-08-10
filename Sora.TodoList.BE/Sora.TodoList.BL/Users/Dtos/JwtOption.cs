@@ -15,5 +15,7 @@
         public string Issuer { get; set; }
 
         public int ExpiresIn { get; set; } = 86400;
+
+        public int RefreshTokenExpiresIn { get; set; } = 2592000;
     }
 }

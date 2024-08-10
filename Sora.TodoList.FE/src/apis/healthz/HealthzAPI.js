@@ -9,7 +9,7 @@ class HealthzAPI extends HttpClientBase {
         const me = this;
         return await me.requestAsync({
             method: "GET",
-            url: `${me.getDomain("Api")}/api/Healthz`,
+            url: `${me.getDomain("Api")}/Healthz`,
         });
     }
 }

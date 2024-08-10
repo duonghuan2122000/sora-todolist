@@ -2,7 +2,7 @@
 
 namespace Sora.TodoList.DL.Data.Entities
 {
-    public class Notification
+    public class NotificationEntity
     {
         /// <summary>
         /// Khóa chính

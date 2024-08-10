@@ -2,12 +2,11 @@
     MainLayout
 -->
 <template>
-    <HeaderLayout v-if="LayoutStore.isUsedLayout" />
-    <RouterView />
+    <HeaderLayout class="HeaderLayout" v-if="LayoutStore.isUsedLayout" />
+    <RouterView class="BodyLayout" />
 </template>
 
 <script setup>
-import { ref } from "vue";
 import HeaderLayout from "./HeaderLayout.vue";
 import { useLayoutStore } from "@/stores/layout";
 

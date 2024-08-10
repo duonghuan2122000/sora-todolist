@@ -12,7 +12,6 @@
                     <InputText
                         id="EmailField"
                         v-model="loginUser.email"
-                        aria-describedby="username-help"
                         autofocus
                     />
                 </div>
@@ -31,6 +30,15 @@
                     :loading="AuthStore.loading"
                     @click="handleLogin"
                 />
+                <div class="RegisterBox">
+                    <div>Chưa có tài khoản?</div>
+                    <Button
+                        text
+                        type="button"
+                        label="Đăng ký"
+                        @click="gotoRegisterPage"
+                    />
+                </div>
             </template>
         </Card>
     </div>
@@ -63,8 +71,15 @@ onMounted(() => {});
  * Hàm login
  */
 const handleLogin = async () => {
-    await AuthStore.updateAccessToken(loginUser);
+    await AuthStore.handleLogin(loginUser);
     router.push({ name: "Home" });
+};
+
+/**
+ * Hàm chuyển trang đăng ký
+ */
+const gotoRegisterPage = () => {
+    router.push({ name: "Register" });
 };
 //#endregion
 </script>
@@ -89,6 +104,20 @@ const handleLogin = async () => {
 
     .SubmitBtn {
         margin-top: 16px;
+    }
+
+    .RegisterBox {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        margin-top: 16px;
+
+        & > div {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            margin-right: 4px;
+        }
     }
 }
 

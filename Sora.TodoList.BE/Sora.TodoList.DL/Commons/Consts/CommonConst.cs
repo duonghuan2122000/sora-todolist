@@ -51,6 +51,46 @@
                     public const string PasswordInvalid = "Mật khẩu không hợp lệ";
                 }
             }
+
+            public static class Register
+            {
+                public static class Code
+                {
+                    public const string EmailExist = "REGISTER_001";
+
+                    public const string PasswordInvalid = "REGISTER_002";
+                }
+
+                public static class Message
+                {
+                    public const string EmailExist = "Email đã tồn tại";
+
+                    public const string PasswordInvalid = "Mật khẩu không hợp lệ (mật khẩu cần ít nhất 6 ký tự)";
+                }
+            }
+        }
+
+        public static class TokenType
+        {
+            public const string RefreshToken = "REFRESH_TOKEN";
+        }
+
+        public static class TaskItem
+        {
+            public static class Status
+            {
+                // lưu nháp
+                public const string DRAFT = "DRAFT";
+
+                // dự kiến
+                public const string BACK_LOG = "BACK_LOG";
+
+                // đang thực hiện
+                public const string IN_PROGRESS = "IN_PROGRESS";
+
+                // hoàn thành
+                public const string DONE = "DONE";
+            }
         }
     }
 }

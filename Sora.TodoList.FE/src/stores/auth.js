@@ -10,25 +10,42 @@ export const useAuthStore = defineStore("auth", () => {
     const auth = reactive({
         accessToken: null,
         expiresAt: null,
+        refreshToken: null,
     });
 
     /**
      * action cập nhật accessToken
      */
-    async function updateAccessToken({ email, password }) {
+    async function handleLogin({ email, password }) {
         loading.value = true;
         const loginRes = await UserAPI.login({
             email,
             password,
         });
 
+        if (!loginRes.success) {
+            // xử lý lỗi
+            return;
+        }
+
         auth.accessToken = loginRes.data.accessToken;
         auth.expiresAt = CommonFunction.initDate(new Date())
             .add(loginRes.data.expiresIn, "second")
             .toDate();
+        auth.refreshToken = loginRes.data.refreshToken;
 
         CommonFunction.setLocalStorage(LOCAL_STORAGE_KEY, auth);
         loading.value = false;
+    }
+
+    async function updateAccessToken({ accessToken, expiresIn, refreshToken }) {
+        auth.accessToken = accessToken;
+        auth.expiresAt = CommonFunction.initDate(new Date())
+            .add(expiresIn, "second")
+            .toDate();
+        auth.refreshToken = refreshToken;
+
+        CommonFunction.setLocalStorage(LOCAL_STORAGE_KEY, auth);
     }
 
     /**
@@ -42,6 +59,7 @@ export const useAuthStore = defineStore("auth", () => {
         const loginRes = JSON.parse(loginResStr);
         auth.accessToken = loginRes.accessToken;
         auth.expiresAt = CommonFunction.initDate(loginRes.expiresAt).toDate();
+        auth.refreshToken = loginRes.refreshToken;
     }
 
     /**
@@ -62,5 +80,13 @@ export const useAuthStore = defineStore("auth", () => {
         CommonFunction.removeLocalStorage(LOCAL_STORAGE_KEY);
     }
 
-    return { loading, auth, updateAccessToken, sync, hasLoggedIn, logout };
+    return {
+        loading,
+        auth,
+        handleLogin,
+        updateAccessToken,
+        sync,
+        hasLoggedIn,
+        logout,
+    };
 });

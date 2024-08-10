@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Sora.TodoList.BL.Users;
 using Sora.TodoList.BL.Users.Dtos;
 using System;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace Sora.TodoList.HttpApi.Controllers
@@ -36,5 +38,36 @@ namespace Sora.TodoList.HttpApi.Controllers
         }
 
         #endregion Login user
+
+        #region Hàm đăng ký
+
+        /// <summary>
+        /// Đăng ký
+        /// </summary>
+        /// <param name="payload"></param>
+        /// <returns></returns>
+        [HttpPost("Register")]
+        public async Task<IActionResult> Register([FromBody] RegisterReqDto payload)
+        {
+            var res = await _userService.Register(payload);
+            return Ok(res);
+        }
+
+        #endregion Hàm đăng ký
+
+        #region Hàm lấy thông tin user
+
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> GetUser()
+        {
+            var user = HttpContext.User;
+            return Ok(new
+            {
+                Id = user.FindFirstValue(ClaimTypes.Sid)
+            });
+        }
+
+        #endregion Hàm lấy thông tin user
     }
 }

@@ -1,14 +1,18 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json.Serialization;
 using NLog;
 using NLog.Web;
+using Sora.TodoList.BL.Users.Dtos;
 using Sora.TodoList.HttpApi.DI;
 using Sora.TodoList.HttpApi.Filters;
 using System;
 using System.IO;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace Sora.TodoList.HttpApi
@@ -69,6 +73,23 @@ namespace Sora.TodoList.HttpApi
                                             .AllowAnyMethod();
                                       });
                 });
+
+                var jwtOption = builder.Configuration.GetSection(JwtOption.KeyConfig).Get<JwtOption>();
+
+                builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                    .AddJwtBearer(options =>
+                    {
+                        options.TokenValidationParameters = new TokenValidationParameters
+                        {
+                            ValidateIssuer = true,
+                            ValidateAudience = true,
+                            ValidateLifetime = true,
+                            ValidateIssuerSigningKey = true,
+                            ValidIssuer = jwtOption.Issuer,
+                            ValidAudience = jwtOption.Issuer,
+                            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOption.Key))
+                        };
+                    });
 
                 var app = builder.Build();
 
